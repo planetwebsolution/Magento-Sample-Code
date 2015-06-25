@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <managebrandsconfig translate="label" module="managebrands">
+            <label>Pws</label>
+            <sort_order>99999</sort_order>
+        </managebrandsconfig>
+    </tabs>  
+	<sections>
+        <managebrands_options translate="label" module="managebrands">
+            <label>Brand Settings</label>
+            <tab>managebrandsconfig</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>1000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>  
+			<groups>
+                <managebrands_group translate="label"  module="managebrands">
+                    <label>General Settings</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <managebrands_enabledisable translate="label comment">
+                            <label>Enable Brand Slider</label>
+                            <comment></comment>
+                            <frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_enabledisable</source_model>
+							 <sort_order>10</sort_order>
+						    <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </managebrands_enabledisable>
+					</fields>
+                </managebrands_group>
+				<managebrands_slidergroup translate="label"  module="managebrands">
+                    <label>Slider Settings</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                       
+						<managebrands_slidertitle translate="label comment">
+                            <label>Slider Title</label>
+                            <comment></comment>
+                            <frontend_input>text</frontend_input>
+							 <sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </managebrands_slidertitle>
+						
+						<managebrands_showbrandname translate="label comment">
+                            <label>Show Brand's Name In Slider</label>
+                            <frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<comment></comment>
+							 <sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </managebrands_showbrandname>
+						<managebrands_iteminrow translate="label comment">
+                            <label>Items In Row</label>
+                            <frontend_input>text</frontend_input>
+							<comment></comment>
+							<sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </managebrands_iteminrow>
+
+						<managebrands_showleftrightbutton translate="label comment">
+                            <label>Next - Pre Navigation</label>
+                            <frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<comment></comment>
+							 <sort_order>60</sort_order>
+							<show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </managebrands_showleftrightbutton>
+						
+                    </fields>
+                </managebrands_slidergroup>
+            </groups>			       
+		</managebrands_options>
+	</sections>
+</config>

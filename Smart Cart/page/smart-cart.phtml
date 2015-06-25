@@ -1,0 +1,620 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Template for Mage_Page_Block_Html
+ */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
+<head>
+<?php echo $this->getChildHtml('head') ?>
+
+<script type="text/javascript">
+
+//Category tab function
+        jQuery(function() {
+        jQuery( "#tabs" ).tabs();
+        });
+
+//Flip Start
+        function  flipFunction(flipid){
+          //alert('hi');
+          jQuery(".flip_"+flipid).parent('.hover').toggleClass('flip');
+        }
+        jQuery(document).ready(function(){
+            
+            jQuery('.hover .click').on("click", function (event){
+                
+                
+            });
+        });
+//Flip end
+
+//decrease qty from list page
+       
+       function decreasecartFunction(cart, idfor){
+                document.getElementById("cart_reload").innerHTML='<img style="margin-left:40%;height:50px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+                //var qty = jQuery('#qty-'+idfor).val();
+                var qty = 1;
+                jQuery.ajax({
+		method: "POST",
+		url: "<?php echo Mage::getURL('') ?>decrease-to-cart.php",
+		data: { pro_id: cart,qty: qty
+                }
+                
+		})
+		.done(function( msg4 ) {
+                
+                document.getElementById("cart_reload").innerHTML= msg4;
+                 topcartcall();
+		});
+	}
+
+//add to cart from list page(option)  
+       function addcartoptionFunction(cart, loopopcount){
+                document.getElementById("cart_reload").innerHTML='<img style="margin-left:40%;height:50px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+                //var qty = jQuery('#qty-'+idfor).val();
+                var qty = 1;
+                var i = 1;
+                var op=[];
+                var opn=[];
+               // alert(qty);
+               for (i = 0; i < loopopcount; i++) {
+                     //alert(i);
+                     //var ophto = jQuery('#opid-'+i+'-'+cart).val();
+                     var iinc = i+1;
+                     op[i] = jQuery('#opid-'+iinc+'-'+cart).val();
+                     opn[i] = jQuery('#opid-'+iinc+'-'+cart).attr('name');
+                     
+                     
+                     
+              }
+                //alert(op);
+                //var op1 = jQuery('#opid-1-'+cart).val();
+                //var opn1 = jQuery('#opid-1-'+cart).name();
+                //var opn1 = jQuery('#opid-1-'+cart).attr('name');
+                //var op2 = jQuery('#opid-2-'+cart).val();
+                //var opn2 = jQuery('#opid-2-'+cart).attr('name');
+                //alert(opn1);
+                jQuery.ajax({
+		method: "POST",
+		url: "<?php echo Mage::getURL('') ?>add-to-cart-option.php",
+		data: { pro_id: cart,count:loopopcount,option:op,option_name:opn}
+		})
+		.done(function( msg4 ) {
+                document.getElementById("cart_reload").innerHTML= msg4;
+		});
+	}
+
+//add to cart function for list page without option      
+       function addcartFunction(cart, idfor){
+                document.getElementById("cart_reload").innerHTML='<img style="margin-left:40%;height:50px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+                
+                var qty = 1;
+                jQuery.ajax({
+		method: "POST",
+		url: "<?php echo Mage::getURL('') ?>add-to-cart.php",
+		data: { pro_id: cart,qty: qty
+                }
+                //alert(data);
+		})
+		.done(function( msg4 ) {
+                document.getElementById("cart_reload").innerHTML= msg4;
+                topcartcall();
+                 
+		});
+	}
+                
+//Reload the heder top mini cart               
+                function topcartcall(){
+                    document.getElementById("top-header-cart").innerHTML='<img style="margin-left:40%;height:25px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+                    
+                    jQuery.ajax({
+                    method: "POST",
+                    url: "<?php echo Mage::getURL('') ?>add-to-cart-top.php",
+                    data: {data: '3'}
+                    
+                    })
+                    .done(function( msgcarttop ) {
+                    document.getElementById("top-header-cart").innerHTML= msgcarttop;
+                     
+                    });
+		}
+
+// Qty down from list page
+    function qtyDown(cuqty){
+        var qty_el = document.getElementById('qty-'+cuqty); 
+        var qty = qty_el.value; 
+        if( qty == 2) {
+            jQuery('.quantity_box_button_down').css({
+                'visibility' : 'visible'
+            });
+        }
+        if( !isNaN( qty ) && qty > 0 ){
+            qty_el.value--;
+        }         
+        return false;
+    }
+
+//Qty up from list page  
+    function qtyUp(cuqty){
+        var qty_el = document.getElementById('qty-'+cuqty); 
+        var qty = qty_el.value; 
+        if( !isNaN( qty )) {
+            qty_el.value++;
+        }
+        jQuery('.quantity_box_button_down').css({
+            'visibility' : 'visible'
+        });
+        
+        return false;
+    }
+    
+    
+//qty down of filp(back) box
+    
+    function qtysecondDown(cuqtysecond){
+        var qty_el = document.getElementById('qty-second-'+cuqtysecond); 
+        var qty = qty_el.value; 
+        if( qty == 2) {
+            jQuery('.quantity_box_button_down').css({
+                'visibility' : 'visible'
+            });
+        }
+        if( !isNaN( qty ) && qty > 0 ){
+            qty_el.value--;
+        }         
+        return false;
+    }
+
+//qty up of filp(back) box   
+    function qtysecondUp(cuqtysecond){
+        var qty_el = document.getElementById('qty-second-'+cuqtysecond); 
+        var qty = qty_el.value; 
+        if( !isNaN( qty )) {
+            qty_el.value++;
+        }
+        jQuery('.quantity_box_button_down').css({
+            'visibility' : 'visible'
+        });
+        
+        return false;
+    }
+
+       
+//List page pagination next button     
+        function paginationInc(pageshowid){
+            var pageshowidplus = pageshowid+1;
+            jQuery(".meneame > span."+pageshowid).hide();
+            jQuery(".meneame > span."+pageshowidplus).show(); 
+        }
+
+//List page pagination previous button               
+        function paginationDec(pageshowid){
+            var pageshowidplus = pageshowid+1;
+            jQuery(".meneame > span."+pageshowidplus).hide();
+            jQuery(".meneame > span."+pageshowid).show(); 
+        }
+
+//List page product show by pagenation              
+        function clickFunction(clickid,mainid){ 
+            jQuery("#pagination > ul").hide();
+            jQuery("#pagination > ul#page-"+clickid).show();
+            jQuery(".op-active").removeClass('activea');
+            jQuery("#"+mainid).addClass('activea');
+        }
+            
+
+//Show option of a product in pop up                
+        function optionFunction(opid){ 
+            document.getElementById("myModal").innerHTML='<img style="margin-left:47%;margin-top:20%;height:50px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+            jQuery.ajax({
+            method: "POST",
+            url: "<?php echo Mage::getURL('') ?>pro_option.php",
+            data: { pro_id: opid }
+            })
+            .done(function( msgop ) {
+            document.getElementById("myModal").innerHTML= msgop;
+            });
+        }
+                
+//Pop up show products additional detail when clik on image or name               
+        function proFunction(str){
+        document.getElementById("myModal").innerHTML='<img style="margin-left:47%;margin-top:20%;height:50px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+        jQuery.ajax({
+        method: "POST",
+        url: "<?php echo Mage::getURL('') ?>smartcart-pro.php",
+        data: { pro_id: str }
+        })
+        .done(function( msg2 ) {
+        document.getElementById("myModal").innerHTML= msg2;
+        });
+        }
+
+//Show first category product when window load
+        jQuery(window).load(function () {
+                jQuery('#firstid').trigger('click');
+        });    
+
+//show product of a category (main body product via ajax)             
+        function catProduct(catid) {
+			
+			 jQuery('#cart_reload').removeClass("stickit-end");
+		     jQuery('#cart_reload').removeClass("stickit");
+			 
+            document.getElementById("tabs-"+catid).innerHTML='<img style="margin-left:40%" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+            jQuery.ajax({
+            method: "POST",
+            url: "<?php echo Mage::getURL('') ?>smartcart-ajax.php",
+            data: { cat_id: catid }
+            })
+            .done(function( msgcat ) {
+            //alert(str);
+            document.getElementById("tabs-"+catid).innerHTML= msgcat;
+	    reload_js('//staticw2.yotpo.com/yM4MA9PY8Wqdly7SZ17i5yUmCsxC3hr00EBzpfRE/widget.js');
+	//var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t);
+	
+eval('(var Translator = new Translate([]);)');
+            //loadyopo();
+            });
+             
+        }
+	
+	function reload_js(src) {
+        jQuery('script[src="' + src + '"]').remove();
+        jQuery('<script>').attr('src', src).appendTo('head');
+    }
+    
+//	function loadyopo() {
+//	     jQuery.ajax({
+//            method: "POST",
+//            url: "<?php echo Mage::getURL('') ?>yopo.php",
+//            data: { cat_id: 3 }
+//	     })
+//	    .done(function( msgcats ) {
+//            //alert(str);
+//            document.getElementById("tabs-ypop").innerHTML= msgcats;
+//            
+//           
+//            });
+//	    
+//	}
+        //function yoptostar(pro_id,cat_pro){
+        //   jQuery.ajax({
+        //    method: "POST",
+        //    url: "<?php echo Mage::getURL('') ?>yotpo_rat.php",
+        //    data: { pro_id:pro_id }
+        //    })
+        //    .done(function( msgyotpo ) {
+        //    //alert(str);
+        //    document.getElementById("for-yopo-rat-"+cat_pro).innerHTML=  msgyotpo;
+        //    
+        //    });
+        //}
+        
+        //jQuery(document).ready(function(){
+        //
+        //    jQuery('.cat').click(function(){
+        //    
+        //        //alert(jQuery(this).attr('cat'));
+        //        var cat_tab = jQuery(this).attr('cat');
+        //        document.getElementById("tabs-"+cat_tab).innerHTML='<img style="margin-left:40%" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+        //        jQuery.ajax({
+        //        method: "POST",
+        //        url: "<?php echo Mage::getURL('') ?>smartcart-ajax.php",
+        //        data: { cat_id: jQuery(this).attr('cat')}
+        //       
+        //        })
+        //        .done(function( msg ) {
+        //             
+        //        //alert( "Data Saved: " + msg );
+        //        //alert("tabs-"+cat_tab);
+        //        document.getElementById("tabs-"+cat_tab).innerHTML= msg;
+        //        });
+        //        });
+        //
+        //
+        //
+        //    });
+                
+       
+   
+//Update qty from cart section (Up button)   
+        function increment_qty_value(id,str){
+                var qty_box_value = document.getElementById('qty_box_'+id).value;
+                //alert(qty_box_value);
+                var Next_value = parseInt(qty_box_value)+1;
+                document.getElementById('qty_box_'+id).value = Next_value;
+                document.getElementById("cart_reload").innerHTML='<img style="margin-left:40%;height:50px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+                
+                jQuery.ajax({
+                        method: "POST",
+                        url: "<?php echo Mage::getURL('') ?>add-to-cart2.php",
+                        data: { pro_id: id,qty: Next_value
+                        }
+                        })
+                        .done(function( msg55 ) {
+                        document.getElementById("cart_reload").innerHTML= msg55;
+                        listRefresh2();
+                        topcartcall();
+                });
+        }
+
+//Update qty from cart section(down button)
+        function decrement_qty_value(id,minvalue)
+            {
+            if(minvalue == '' || minvalue == null)
+            {
+            minvalue = 1;
+            }
+            var qty_box_value = document.getElementById('qty_box_'+id).value;
+            var Next_value = parseInt(qty_box_value)-1;
+            if(Next_value <= minvalue)
+            {
+            Next_value = minvalue;
+            }
+            document.getElementById('qty_box_'+id).value = Next_value;
+            document.getElementById("cart_reload").innerHTML='<img style="margin-left:40%;height:50px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+            
+            jQuery.ajax({
+                    method: "POST",
+                    url: "<?php echo Mage::getURL('') ?>decrease-to-cart.php",
+                    data: { pro_id: id,qty: Next_value
+                    }
+                    
+                    })
+                    .done(function( msg555 ) {
+                    document.getElementById("cart_reload").innerHTML= msg555;
+                     listRefresh2();
+                     topcartcall();
+                    });
+                
+        }
+
+//cart visible when we scroll
+        //jQuery(document).ready(function() {
+        //        jQuery('.container21').stickem();
+        //});
+		
+		jQuery("document").ready(function(){
+    //var nav = jQuery('#cart_reload');
+	 var winheight = jQuery(window).width();
+	 if (winheight > 767) {
+    jQuery(window).scroll(function () {
+		var headerh = (jQuery('.header-middle').height())+(jQuery('.head-bar').height())+85;
+		var sidehight = jQuery('#cart_reload').height();
+		var tabhight = jQuery('#tabs').height();
+		
+		 
+		 if (sidehight <= tabhight) {
+			 var hdiffer = (tabhight - sidehight) + headerh;
+			if ((jQuery(window).scrollTop() > headerh) && (jQuery(window).scrollTop() < hdiffer) ) {
+              jQuery('#cart_reload').removeClass("stickit-end").addClass("stickit");
+			} else if (jQuery(window).scrollTop() >= hdiffer) {
+             jQuery('#cart_reload').removeClass("stickit").addClass( "stickit-end" );
+			}
+			else {
+				  jQuery('#cart_reload').removeClass("stickit-end").addClass('stickit');
+			}
+			
+			if (jQuery(window).scrollTop() <= headerh) {
+				jQuery('#cart_reload').removeClass("stickit"); 
+			}
+		 }
+		 else if(sidehight > tabhight)
+		 {
+		    jQuery('#cart_reload').removeClass("stickit-end");
+		     jQuery('#cart_reload').removeClass("stickit");
+		 }
+    });
+	 }
+	
+	
+});
+
+//Search functionality                
+        function searchText(){
+                var catid = jQuery('div#tabs > ul > li.ui-tabs-active > a').attr('cat');
+                var searchtexx = jQuery('#smart_search').val();
+                
+                if (searchtexx == '') {
+                   
+                    jQuery(".ui-tabs-nav").css("display", "block"); 
+                    document.getElementById("tabs-"+catid).innerHTML='<img style="margin-left:40%" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />';
+                    
+                    jQuery.ajax({
+                    method: "POST",
+                    url: "<?php echo Mage::getURL('') ?>smartcart-ajax.php",
+                    data: { cat_id: catid }
+                    })
+                    .done(function( msgcat ) {
+                    //alert(str);
+                    document.getElementById("tabs-"+catid).innerHTML= msgcat;
+                    });
+                    
+                }else{
+                    
+                    jQuery(".ui-tabs-nav").css("display", "none"); 
+                    document.getElementById("tabs-"+catid).innerHTML='<img style="margin-left:40%" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+            
+                    jQuery.ajax({
+                    method: "POST",
+                    url: "<?php echo Mage::getURL('') ?>custom_search.php",
+                    data: { query_text: searchtexx
+                    }
+                    
+                    })
+                    .done(function(search) {
+                    document.getElementById("tabs-"+catid).innerHTML= search;
+                     
+                    });
+                  
+                }
+        }
+
+//go back to product list page after click on secrch result page link of return category
+
+        function searchTextback(){
+                var catid = jQuery('div#tabs > ul > li.ui-tabs-active > a').attr('cat');
+                var searchtexx = jQuery('#smart_search').val();
+                    jQuery(".ui-tabs-nav").css("display", "block"); 
+                    document.getElementById("tabs-"+catid).innerHTML='<img style="margin-left:40%" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />';
+                    
+                    jQuery.ajax({
+                    method: "POST",
+                    url: "<?php echo Mage::getURL('') ?>smartcart-ajax.php",
+                    data: { cat_id: catid }
+                    })
+                    .done(function( msgcat ) {
+                    //alert(str);
+                    document.getElementById("tabs-"+catid).innerHTML= msgcat;
+                    });
+                }
+
+//List page refresh after edit item from cart section
+        function listRefresh2() {
+                var catid = jQuery('div#tabs > ul > li.ui-tabs-active > a').attr('cat');
+                var searchtexx = jQuery('#smart_search').val();
+                
+                 jQuery(".ui-tabs-nav").css("display", "block"); 
+                    document.getElementById("tabs-"+catid).innerHTML='<img style="margin-left:40%" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />';
+                
+                jQuery.ajax({
+		method: "POST",
+		url: "<?php echo Mage::getURL('') ?>smartcart-ajax.php",
+		data: { cat_id: catid }
+		})
+		.done(function( msgcat ) {
+		//alert(str);
+		document.getElementById("tabs-"+catid).innerHTML= msgcat;
+		});
+                   
+        }
+                
+                
+//for estimate shipping
+                
+        function submit_estimate(){
+               
+                var estimatezip = jQuery('#zip_estimate').val();
+                if (estimatezip == '') {
+                   
+                alert('Enter Zip code first');
+                    
+                }else{
+                 
+                document.getElementById("estimate_shippinng").innerHTML='<img style="margin-left:40%;height:20px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+        
+                jQuery.ajax({
+		method: "POST",
+		url: "<?php echo Mage::getURL('') ?>shipping-estimate.php",
+		data: { zipcode: estimatezip
+                }
+                
+		})
+		.done(function(zipcode) {
+		
+		//alert(zipcode);
+                document.getElementById("estimate_shippinng").innerHTML= zipcode;
+                 
+		});
+                  
+                }
+        }
+
+//Delete link from cart section
+    function popupdlt(dltid) {
+    
+        jQuery('<div class="popdlt"></div>').appendTo('body')
+        .html('<div class="popdlth"><h4>Are you sure to want to delete this product from your cart?</h4></div>')
+        .dialog({
+            modal: true,
+            zIndex: 10000,
+            autoOpen: true,
+            width: 'auto',
+            resizable: true,
+            buttons: {
+                Yes: function () {
+                    document.getElementById("cart_reload").innerHTML='<img style="margin-left:40%;height:50px;" src="<? echo $this->getSkinUrl('images/rm-load2.gif'); ?>" />'
+                    
+                    jQuery.ajax({
+                    method: "POST",
+                    url: "<?php echo Mage::getURL('') ?>dlt-to-cart.php",
+                    data: { pro_id: dltid
+                    }
+                    })
+                    .done(function( msgdlt ) {
+                    document.getElementById("cart_reload").innerHTML= msgdlt;
+                    topcartcall();
+                    listRefresh2();
+                    });
+                    
+                    jQuery(this).dialog("close");
+                },
+                No: function () {
+                    jQuery(this).dialog("close");
+                }
+                },
+                close: function (event, ui) {
+                jQuery(this).remove();
+            }
+        });
+    
+    }
+</script>
+
+</head>
+<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+<?php echo $this->getChildHtml('after_body_start') ?>
+<div class="wrapper wrapper-wide">
+    <?php echo $this->getChildHtml('global_notices') ?>
+    
+        <?php echo $this->getChildHtml('header') ?>
+        
+        <div class="main-container col2-right-layout container21">
+            <div class="product_main_outer row21 stickem-container">
+                <?php //echo $this->getChildHtml('breadcrumbs') ?>
+                <div class="col-main2 content col-sm-9">
+                    <?php echo $this->getChildHtml('global_messages') ?>
+                    <div class="smart-search">
+                    <input type="text" value="" onkeyup="searchText();" id="smart_search" placeholder="Search In SmartCart">
+                    </div>
+                    <div class="clear"></div>
+                    <?php echo $this->getChildHtml('content') ?>
+                </div>
+                <div id="cart_reload" class="aside stickem col-sm-3 no_padding"><?php //echo $this->getChildHtml('right') ?>
+		<?php echo Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->setTemplate('checkout/cart/sidebar_ajax.phtml')->toHtml() ?></div>
+            </div>
+ 
+        <?php echo $this->getChildHtml('footer') ?>
+        <?php echo $this->getChildHtml('before_body_end') ?>
+    
+</div>
+<?php echo $this->getAbsoluteFooter() ?>
+</body>
+</html>

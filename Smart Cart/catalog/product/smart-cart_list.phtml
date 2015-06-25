@@ -1,0 +1,65 @@
+<?php
+/*
+ *Smart Cart 
+ *Developed by R Developer
+ *date 27April2015
+*/
+?>
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/ui_css.css'); ?>" type="text/css" />
+
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/bootstrap.css'); ?>" type="text/css" />
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/screen.css'); ?>" type="text/css" />
+<!--<link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/jquery.custom-scrollbar.css'); ?>" type="text/css" />-->
+
+<script src="<?php echo $this->getSkinUrl('js/jquery-ui.js'); ?>"></script>
+<script src="<?php echo $this->getSkinUrl('js/bootstrap.js'); ?>"></script>
+<script src="<?php echo $this->getSkinUrl('js/jquery.stickem.js'); ?>"></script>
+<div>
+<div>
+   
+   <?php /* ?><div data-url="http://rankmediadev.com/greenvirgin/30-moringa-tea-bags-natural-super-multi-vitamin" data-product-id="31" class="yotpo bottomLine">
+</div>
+   <div data-url="http://rankmediadev.com/greenvirgin/30-moringa-tea-bags-natural-super-multi-vitamin" data-product-id="31" class="yotpo bottomLine">
+</div><?php */ ?>
+      <div id="tabs">
+        
+       <ul>
+          <?php $_helper = Mage::helper('catalog/category') ?>
+              <?php $_categories = Mage::getModel('catalog/category')
+                ->getCollection()
+                ->addAttributeToSelect('*')
+                ->addIsActiveFilter()
+                ->addAttributeToFilter('is_anchor', 0)
+                ->addAttributeToFilter('level',2);
+                //echo count($_categories);?>
+
+              <?php if (count($_categories) > 0): ?>
+   
+              <?php foreach($_categories as $_category): 
+                    $cat_id = $_category->getId();
+                    $_category = Mage::getModel('catalog/category')->load($_category->getId()); ?>
+                     <li><a onclick=catProduct(<?php echo $cat_id; ?>) href="#tabs-<?php echo $cat_id; ?>" <?php if($cat_id == 3){ ?>id="firstid"<?php } ?> class="cat" cat="<?php echo $cat_id; ?>" value="<?php echo $cat_id; ?>"><?php echo $_category->getName(); ?></a></li>
+            
+              <?php endforeach; ?>
+    
+              <?php endif; ?>    
+        </ul> 
+         
+         <?php foreach($_categories as $_category):
+         $cat_id2 = $_category->getId();?>
+         
+        <div id="tabs-<?php echo $cat_id2; ?>">
+             
+        </div>
+        <?php endforeach; ?>
+</div>
+</div>
+ 
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  
+</div>
+ 
+</div>
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/styles-smartcart.css'); ?>" type="text/css" />
+
